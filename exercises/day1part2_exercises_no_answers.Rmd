@@ -37,8 +37,9 @@ Use an if() statement to print a suitable message reporting whether there are an
 
 Hint: use the `any` function.
 
-```{asis}
-### Answer
+```{r}
+any(gapminder$year == 2002)
+
 ```
 
 ```{r}
@@ -57,9 +58,42 @@ Write a script that finds the mean life expectancy by country for countries whos
 
 Write a script that loops through the `gapminder` data by continent and prints out whether the mean life expectancy is smaller than 50, between 50 and 70, or greater than 70.
 
-```{asis}
-### Answer
+```{r}
+
+lower_threshold <- 50
+upper_threshold <- 70
+
+for(i in unique(gapminder$continent)){
+  continent_mean <- mean(gapminder$lifeExp[gapminder$continent == i])
+  
+  if(continent_mean < 50){
+    print(paste0('The mean Life Expectancy of continent ', i, ' -> ', continent_mean, ' is less than ', lower_threshold,'.' ))
+  }else if(continent_mean <= 70){
+    print(paste0('The mean Life Expectancy of continent ', i, ' -> ', continent_mean, ' is between ', lower_threshold,' and ', upper_threshold, '.' ))
+  }else{
+    print(paste0('The mean Life Expectancy pf continent ', i, ' -> ', continent_mean, ' is greater than ', upper_threshold,'.' ))
+  }
+  
+}
+
+
 ```
+
+```{r}
+
+overall_mean <- mean(gapminder$lifeExp)
+
+for(i in unique(gapminder$country)){
+  country_mean <- mean(gapminder$lifeExp[gapminder$country == i])
+  
+  if(country_mean<overall_mean){
+    print(paste0("Mean Life Expectancy of Country ", i, " is ", round(country_mean), "."))
+  }
+  
+}
+
+```
+
 
 ```{r}
 overall_mean <- mean(gapminder$pop)
