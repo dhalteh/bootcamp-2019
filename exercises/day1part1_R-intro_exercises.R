@@ -33,23 +33,30 @@ print('eat' != 'drink')
 
 # Check if it is true that 1 is equal to 1 *AND* 1 is equal to 2 
 # (Hint: remember what the operators & and | do)
-'Hello'
+print((1==1) & (1==2))
 
 # Check if it is true that 1 is equal to 1 *OR* 1 is equal to 2
-
+print((1==1) | (1==2))
 
 #### Packages and Functions ####
 
 # Load the package tidyverse
-
+library(tidyverse)
 
 # Open the help file for the function recode 
 # (Hint: remember what ? does)
+?recode
+
+test_vec <- c('Alpha', 'Beta', 'Gamma', 'Delta')
+recode(test_vec, 'Alpha' = 'Greek A')
+
 
 
 #### REVIEW: DATA STRUCTURES ####
 
 #### Vectors ####
+
+example <- 
 
 # Run this code to generate variables x1 and x2
 set.seed(1234)
@@ -57,30 +64,32 @@ x1 <- rnorm(5)
 x2 <- rnorm(20, mean=0.5)
 
 # Select the 3rd element in x1
-
+print(x1[3])
 
 # Select the elements of x1 that are less than 0
-
+print(x1[x1<0])
 
 # Select the elements of x2 that are greater than 1
-
+print(x2[x2>1])
 
 # Create x3 containing the first five elements of x2
-
+x3 <- x2[1:5]
 
 # Select all but the third element of x1
-
+print(x1[-3])
 
 #### Missing values ####
 
 # Generate a vector
 vec <- c(1, 8, NA, 7, 3)
+vec2 <- c(rep(NA, 5), sample(seq(1,10), 10))
 
 # Calculate the mean of vec, excluding the NA value
-
+print(mean(vec, na.rm = TRUE))
 
 # Count the number of missing values in vec
-
+print(sum(is.na(vec)))
+print(sum(is.na(vec2)))
 
 #### Factors ####
 
