@@ -33,7 +33,7 @@ print('eat' != 'drink')
 
 # Check if it is true that 1 is equal to 1 *AND* 1 is equal to 2 
 # (Hint: remember what the operators & and | do)
-
+'Hello'
 
 # Check if it is true that 1 is equal to 1 *OR* 1 is equal to 2
 
