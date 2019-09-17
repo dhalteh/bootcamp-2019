@@ -110,7 +110,7 @@ mat <- matrix(c(1:51, rep(NA,4)), ncol=5)
 mat[4,5]
 
 # Select column 3
-
+mat[, 3]
 
 # Bonus: How many NA values are there in this matrix?
 
@@ -234,22 +234,24 @@ le_mean_by_continent_year <- gapminder %>%
 #### Statistics, part 1 ####
 
 # Calculate the correlation between 'lifeExp' and 'gdpPercap'.
+cor(gapminder07$lifeExp, gapminder07$gdpPercap)
 
 
 # Use a t-test to evaluate the difference between 'gdpPercap' in "high" and "low" life expectancy countries. Store the results as t1, and then print out t1.
-
+t1 <- t.test(gapminder07$gdpPercap ~ gapminder07$lifeExp_highlow)
 
 
 #### Statistics, part 2 ####
 
 # Conduct a linear regression predicting 'lifeExp' as a function of 'gdpPercap' and 'pop', and store the results as reg1.
+reg1 <- lm(gapminder07$lifeExp ~ gapminder07$gdpPercap + gapminder07$pop)
 
 
 # Print out reg1.
-
+print(reg1)
 
 # Run summary() on reg1.
-
+summary(reg1)
 
 #### WRITING FILES ####
 
@@ -257,7 +259,7 @@ le_mean_by_continent_year <- gapminder %>%
 
 # Save the gapminder07 data frame as a CSV file using write.csv() in the "data" subfolder within the working directory
 # Set the argument `row.names = FALSE`.
-
+write_csv(gapminder07, 'Desktop/MSIA_bootcamp/bootcamp-2019/data/gapminder07.csv')
 
 #### Save R objects ####
 
@@ -269,7 +271,9 @@ le_mean_by_continent_year <- gapminder %>%
 #### Histograms ####
 
 # Create a histogram of the variable 'lifeExp' in gapminder07
-
+hist(gapminder07$lifeExp,
+     main = paste('Life Expectancy in 2007'),
+     xlab = 'Life Expectancy')
 
 # Re-create the histogram with a title and axis labels
 
@@ -280,7 +284,10 @@ le_mean_by_continent_year <- gapminder %>%
 #### Scatterplots ####
 
 # Create a scatterplot with `lifeExp` on the y-axis and `gdpPercap` on the x-axis.
-
+plot(lifeExp ~ gdpPercap, data = gapminder07,
+     main = 'Relationship between Life Expectancy and GDP Per Capita',
+     xlab = 'GDP per Capita',
+     ylab = 'Life Expectancy')
 
 # Add a title and axis labels.
 
