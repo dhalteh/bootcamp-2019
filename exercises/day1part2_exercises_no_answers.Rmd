@@ -39,6 +39,7 @@ Hint: use the `any` function.
 
 ```{r}
 any(gapminder$year == 2002)
+any(gapminder$year == 2012)
 
 ```
 
@@ -133,10 +134,18 @@ for (i in unique(gapminder$continent)){
 
 Create a function that given a data frame will print the name of each column and the class of data it contains. Use the gapminder dataset.  Hint: Use `mode()` or `class()` to get the class of the data in each column. Remember that `names()` or `colnames()` returns the name of the columns in a dataset.
 
-```{asis}
+```{r}
 ### Answer
 
-Note: Some of these were taken or modified from https://www.r-bloggers.com/functions-exercises/
+info_func <- function(dataframe){
+  for(column in colnames(dataframe)){
+    print(paste0('Name: ', column, ' , Class: ', class(dataframe[,column])))
+  }
+}
+
+info_func(gapminder)
+
+#Note: Some of these were taken or modified from https://www.r-bloggers.com/functions-exercises/
 ```
 
 ```{r}
@@ -151,8 +160,18 @@ data_frame_info(gapminder)
 
 Create a function that given a vector will print the mean and the standard deviation of a **vector**, it will optionally also print the median. Hint: include an argument that takes a boolean (`TRUE`/`FALSE`) operator and then include an `if` statement.
 
-```{asis}
-### Answer
+```{r}
+
+vector_stats <- function(vector, median=FALSE){
+  print(paste0('Mean: ', mean(vector, na.rm = TRUE)))
+  print(paste0('SD: ', sd(vector, na.rm = TRUE)))
+  if(median==TRUE){
+    print(paste0('Median: ', median(vector, na.rm = TRUE)))
+  }
+}
+
+my_vec <- c(sample(seq(1,100), 20), rep(NA, 5))
+vector_stats(my_vec, median=TRUE)
 
 ```
 
