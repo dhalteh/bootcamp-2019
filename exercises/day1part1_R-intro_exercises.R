@@ -9,27 +9,27 @@
 x <- 5
 
 # Multiply x by 3
-
+print(x*3)
 
 # Take the log of the above (Hint, you need the function log() here)
-
+print(log(x*3))
 
 # Subtract 4 from the above
-
+print((log(x*3))-4)
 
 # Square the above
-
+print(((log(x*3))-4)**2)
 
 #### Comparisons and Logical Operators ####
 
 # Check if 1 is bigger than 2
-
+print(1>2)
 
 # Check if 1 + 1 is equal to 2
-
+print((1+1)==2)
 
 # Check if it is true that the strings "eat" and "drink" are not equal to each other
-
+print('eat' != 'drink') 
 
 # Check if it is true that 1 is equal to 1 *AND* 1 is equal to 2 
 # (Hint: remember what the operators & and | do)
