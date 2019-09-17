@@ -6,7 +6,7 @@
 #### Arithmetic ####
 
 # Pick a number; save it as x
-
+x <- 5
 
 # Multiply x by 3
 
