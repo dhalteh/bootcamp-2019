@@ -107,7 +107,7 @@ print(sum(is.na(vec2)))
 mat <- matrix(c(1:51, rep(NA,4)), ncol=5)
 
 # Select row 4, column 5
-
+mat[4,5]
 
 # Select column 3
 
@@ -121,19 +121,21 @@ mat <- matrix(c(1:51, rep(NA,4)), ncol=5)
 data(mtcars)
 
 # Identify the number of observations (rows) and number of variables (columns)
-
+nrow(mtcars)
+ncol(mtcars)
 
 # Identify the names of the variables
-
+colnames(mtcars)
 
 # Select the variable 'mpg'
-
+mtcars$mpg
+mtcars[,'mpg']
 
 # Select the 4th row
-
+mtcars[4,]
 
 # Square the value of the 'cyl' variable and store this as a new variable 'cylsq'
-
+mtcars$cylsq <- (mtcars$cyl)**2
 
 #### READING FILES ####
 
@@ -141,46 +143,46 @@ data(mtcars)
 
 
 # Read gapminder data with read.csv()
-gapminder <- read.csv("data/gapminder5.csv", stringsAsFactors=FALSE)
+gapminder <- read.csv("Desktop/MSIA_bootcamp/bootcamp-2019/data/gapminder5.csv", stringsAsFactors=FALSE)
 
 # Load the readr package
-
+library(readr)
 
 # Read gapminder data with read_csv()
-
+gapminder <- read_csv("Desktop/MSIA_bootcamp/bootcamp-2019/data/gapminder5.csv")
 
 #### DATA MANIPULATION ####
 
 #### Exploring data frames ####
 
 # Run summary() on the gapminder data
-
+summary(gapminder)
 
 # Find the mean of the variable pop
-
+mean(gapminder$pop)
 
 # Create a frequency table of the variable 'year'
 # Hint: use table()
-
+table(gapminder$year)
 
 # Create a proportion table of the variable 'continent'
 # Hint: use prop.table()
-
+prop.table(table(gapminder$continent))
 
 #### Subsetting and Sorting ####
 
 # Create a new data frame called gapminder07 contaning only those rows in the gapminder data where year is 2007
-
+gapminder07 <- gapminder[gapminder$year == 2007,]
 
 # Created a sorted frequency table of the variable continent in gapminder07
-
+sort(table(gapminder07$continent))
 
 # Print out the population of Mexico in 2007
-
+gapminder07$pop[gapminder07$country == 'Mexico']
 
 # BONUS: Print out the rows represnting the 5 countries with the highest population in 2007
 # Hint: Use order(), which we learned about, and head(), which prints out the first 5 rows of a data frame
-
+gapminder07[order(gapminder07$pop, decreasing = TRUE),]
 
 #### Adding and removing columns ####
 
@@ -190,12 +192,15 @@ gapminder <- read.csv("data/gapminder5.csv", stringsAsFactors=FALSE)
 #### Recoding variables ####
 
 # Round the values of the variable `lifeExp` using `round()` and store this as a new variable `lifeExp_round`
-
+gapminder07$lifeExp_round <- round(gapminder07$lifeExp)
 
 # Print out the new variable to see what it looks like
 
 
 # This code creates the new variable 'lifeExp_over70'. Try to understand what it does.
+
+#gapminder07$lifeExp_over70 <- ifelse(gapminder07$lifeExp>70, 'Yes', 'No')
+
 gapminder07$lifeExp_over70 <- NA  # Initialize a variable containing all "NA" values
 gapminder07$lifeExp_over70[gapminder07$lifeExp>70] <- "Yes"
 gapminder07$lifeExp_over70[gapminder07$lifeExp<70] <- "No"
@@ -205,15 +210,26 @@ table(gapminder07$lifeExp_over70)
 # "High" when life expectancy is over the mean and the value "Low" 
 # when it is below the mean. When you are done, print a frequency table.
 
+mean_lifeexp <- mean(gapminder07$lifeExp, na.rm = T)
 
-
-
+gapminder07$lifeExp_highlow <- NA
+gapminder07$lifeExp_highlow[gapminder07$lifeExp>mean_lifeexp] <- 'High'
+gapminder07$lifeExp_highlow[gapminder07$lifeExp<mean_lifeexp] <- 'Low'
 
 #### Aggregating ####
 
 # Find the mean of life expectancy in 2007 for each continent
 # Hint: use the aggregate() function
 
+aggregate(gapminder07$lifeExp ~ gapminder07$continent, FUN = mean)
+
+le_mean_by_continent <- gapminder07 %>% 
+  group_by(continent) %>% 
+  summarise('Mean LE' = mean(lifeExp))
+ 
+le_mean_by_continent_year <- gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise('LE Mean' = mean(lifeExp))
 
 #### Statistics, part 1 ####
 
