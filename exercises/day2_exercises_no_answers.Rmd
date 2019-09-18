@@ -31,6 +31,20 @@ Read both California energy datasets. Make sure the `datetime` variable is in an
 ```
 
 ```{r}
+
+library(dplyr)
+library(lubridate)
+library(readr)
+
+generation <- read_csv('~/Desktop/MSIA_bootcamp/bootcamp-2019/data/ca_energy_generation.csv')
+imports <- read_csv('~/Desktop/MSIA_bootcamp/bootcamp-2019/data/ca_energy_imports.csv')
+
+generation2 <- fread('~/Desktop/MSIA_bootcamp/bootcamp-2019/data/ca_energy_generation.csv')
+
+```
+
+
+```{r}
 library(dplyr)
 library(lubridate)
 generation_dp <- read.csv(here::here("data/ca_energy_generation.csv"), 
@@ -50,11 +64,11 @@ imports_dp <- mutate(imports_dp, datetime = as_datetime(datetime))
 ```{r}
 library(data.table)
 library(lubridate)
-generation_dt <- fread(here::here("data/ca_energy_generation.csv"))
-imports_dt <- fread(here::here("data/ca_energy_imports.csv"))
+#generation_dt <- fread(here::here("data/ca_energy_generation.csv"))
+#imports_dt <- fread(here::here("data/ca_energy_imports.csv"))
 
-generation_dt[,datetime := as_datetime(datetime)]
-imports_dt[,datetime := as_datetime(datetime)]
+#generation_dt[,datetime := as_datetime(datetime)]
+#imports_dt[,datetime := as_datetime(datetime)]
 ```
 
 
@@ -62,12 +76,28 @@ imports_dt[,datetime := as_datetime(datetime)]
 
 Merge the two datasets and then melt the resulting dataframe/datatable to make it tidy.
 
-```{asis}
-### Answer
+```{r}
+
+library(reshape2)
+long_gen <- melt(generation, id.vars = 'datetime',
+                 variable.name = 'source',
+                 value.name = 'usage')
+
+head(long_gen)
+
+
 ```
 
-```{asis}
-**`dplyr`**
+```{r}
+
+merged_energy <- merge(generation, imports, by = 'datetime')
+
+long_merged_energy <- melt(merged_energy, 
+                           id.vars = 'datetime',
+                           variable.name = 'source',
+                           value.name = 'usage')
+
+
 ```
 
 ```{r}
@@ -111,8 +141,21 @@ Create a series of new variables:
 
 Bonus: If you are using `dplyr`, try to do this all in one pipe!
 
-```{asis}
-### Answer
+```{r}
+temp <- merged_energy %>% 
+  filter(large_hydro < 1000) %>% 
+  mutate(log_coal = log(coal)) %>% 
+  arrange(desc(coal))
+head(temp)
+```
+
+```{r}
+
+library(tidyverse)
+
+merged_energy2 <- merged_energy %>% 
+  mutate()
+
 ```
 
 ```{asis}
@@ -132,8 +175,33 @@ long_ca_energy_dp <- long_ca_energy_dp %>%
 long_ca_energy_dp %>% select(day, log_output, per_output) %>% head()
 ```
 
-```{asis}
-**`data.table`**
+```{r}
+
+merged_energy2 <- merged_energy %>% 
+  select(contains('hydro')) %>% 
+  mutate(total_hydro = rowSums(., na.rm = T))
+head(merged_energy2)
+
+merged_energy3 <- merged_energy %>% 
+  select(contains('hydro')) %>% 
+  mutate(total_hydro = rowSums(., na.rm = T)) %>% 
+  summarise(mean(total_hydro))
+head(merged_energy3)
+
+
+```
+
+```{r}
+
+merged_energy2 <- long_gen %>%
+  filter(source %in% c('small_hydro', 'large_hydro', 'biogas', 'biomass')) %>% 
+  group_by(source) %>% 
+  summarise(mean(usage))
+head(merged_energy2)
+  
+
+
+
 ```
 
 ```{r}
@@ -179,8 +247,16 @@ long_ca_energy_dp %>%
   arrange(mean_hourly)
 ```
 
-```{asis}
-**`data.table`**
+```{r}
+library(data.table)
+#head(generation[generation$natural_gas>5000 & generation$large_hydro > 2000,])
+
+print(generation2[, total_hydro := small_hydro + large_hydro])
+print(generation2[,.(mean(nuclear), mean(biogas))])
+print(generation2[,median(solar), by = hour(datetime)])
+print(generation2[solar>0, max(natural_gas), by = mday(datetime)])
+
+
 ```
 
 ```{r}
